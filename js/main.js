@@ -58,7 +58,7 @@ $(document).ready(function() {
 			}
 
 			this.rotateByClick = function(currentDegCorrecton, counterValue) {
-	 			pointer.classList.remove('pointer-animated');
+	 			//pointer.classList.remove('pointer-animated');
 	 			$('.pointer').animate({rotate: currentDegCorrecton}, counterValue);
 			}
 			
