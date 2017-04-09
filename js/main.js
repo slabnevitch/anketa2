@@ -15,6 +15,9 @@ $(document).ready(function() {
 	 		var counter = document.querySelector('.jsskills-counter');
 	 		var scale = document.querySelector('.scale-wrap');
 	 		var body = document.body;
+		 	var	prevX = 0;
+		 	var clickCount = 0;
+		 	var num = 0;
 
 	 		
 	 		this.init = function() {
@@ -37,15 +40,22 @@ $(document).ready(function() {
 		 			cursorX = e.pageX - origin,
 		 			currentDeg = cursorX/deg,
 		 			currentDegCorrecton = currentDeg - 90,
-		 			counterValue = cursorX/countItem; 
-					
-	 				counter.innerText = counterValue.toFixed();
+		 			counterValue = cursorX/countItem,
+		 			pointerDifference = counterValue.toFixed() - prevX;
+
+
+	 				console.log('текущее '+ counterValue.toFixed());
+	 				console.log('старое '+ prevX);
+	 				console.log('разница '+ pointerDifference);
 
 				if(byClick == true){
-					this.rotateByClick(currentDegCorrecton, counterValue);
+					this.rotateByClick(currentDegCorrecton, pointerDifference);
+					this.animateCounter(prevX, counterValue.toFixed());
 				}else{
 	 				this.rotatePointer(currentDegCorrecton);
+	 				counter.innerText = counterValue.toFixed();
 				}
+		 			prevX = counterValue.toFixed(); 
 
 	 			
 	 			return counter.innerText;
@@ -57,8 +67,10 @@ $(document).ready(function() {
 	 			//$('.pointer').animate({rotate: currentDegCorrecton}, 1);
 			}
 
-			this.rotateByClick = function(currentDegCorrecton, counterValue) {
-	 			$('.pointer').animate({rotate: currentDegCorrecton}, counterValue *4);
+			this.rotateByClick = function(currentDegCorrecton, pointerDifference) {
+	 			var pointerDifferenceModule = Math.abs(pointerDifference);
+	 			console.log('модуль ' + pointerDifferenceModule);
+	 			$('.pointer').animate({rotate: currentDegCorrecton}, pointerDifferenceModule *4);
 			}
 			
 			this.resetCounter = function() {
@@ -66,21 +78,33 @@ $(document).ready(function() {
 					counter.innerText = '000';
 			}
 
-			this.animateCounter = function(counterText) {
-				var num = +counterText,
-					nextNum = 0;
-				counter.innerText = 000;
+			this.animateCounter = function(prevNum, nextNum) {
+				
+								//counter.innerText = prevNum;
 
-				var timer = setInterval(function() {
-					nextNum++;
-					if(nextNum > 1000){
-						nextNum = 1000;
-					}
-					counter.innerText = nextNum;
-					if(nextNum == num){
-						 clearInterval(timer);
-					}
-				}, 1);
+				console.log('prevNum ' + prevNum);
+				console.log('nextNum ' + nextNum);
+				if(nextNum > prevNum){
+					console.log('сработал ИФ');
+					var plusTimer = setInterval(function() {
+						num++;
+						if(num == nextNum){
+							 clearInterval(plusTimer);
+						}
+						counter.innerText = num;
+					}, 1);
+						
+				}else{
+					var minusTimer = setInterval(function() {
+						num--;
+						if(num == nextNum){
+							 clearInterval(minusTimer);
+						}
+						counter.innerText = num;
+					}, 1);
+				}
+				
+						console.log('num in timer ' + num);
 				return nextNum;
 			}
 
@@ -92,13 +116,15 @@ $(document).ready(function() {
 			}
 
 			function clickHandler(e){
-				
+				console.log('коунт ' + clickCount);
 				pointer.classList.remove('pointer-animated');
-				//pointer.style.transform = 'rotate(-90deg)';
+				if(clickCount == 0){
+					pointer.style.transform = 'rotate(-90deg)';
+				}
+				clickCount++;
 				scale.removeEventListener('mousemove', mooveHandler);
 	 			
-	 			__self.animateCounter(__self.countActivation(e, true));
-				
+	 			__self.countActivation(e, true);				
 			}
 
 			function enterHandler(e) {
