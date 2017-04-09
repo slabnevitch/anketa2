@@ -28,17 +28,17 @@ $(document).ready(function() {
 				body.addEventListener('click', bodyClickHandler);
 			}
 
-			this.countActivation = function(someEvent, byClick){
+			this.countActivation = function(e, byClick){
 	 			var scaleWidth = scale.offsetWidth,
 		 			deg = scaleWidth/180,
 		 			coords = scale.getBoundingClientRect(),
 		 			origin = coords.left,
 		 			countItem = scaleWidth/1000;
-		 			cursorX = someEvent.pageX - origin,
+		 			cursorX = e.pageX - origin,
 		 			currentDeg = cursorX/deg,
 		 			currentDegCorrecton = currentDeg - 90,
 		 			counterValue = cursorX/countItem; 
-					//counterValue.toFixed();
+					
 	 				counter.innerText = counterValue.toFixed();
 
 				if(byClick == true){
@@ -58,7 +58,7 @@ $(document).ready(function() {
 			}
 
 			this.rotateByClick = function(currentDegCorrecton, counterValue) {
-	 			//pointer.classList.remove('pointer-animated');
+	 			
 	 			$('.pointer').animate({rotate: currentDegCorrecton}, counterValue);
 			}
 			
@@ -93,13 +93,12 @@ $(document).ready(function() {
 			}
 
 			function clickHandler(e){
-				var someEvent = e,
-						byClick = true;
-
 				
+				pointer.classList.remove('pointer-animated');
+				pointer.style.transform = 'rotate(-90deg)';
 				scale.removeEventListener('mousemove', mooveHandler);
 	 			
-	 			__self.animateCounter(__self.countActivation(someEvent, byClick));
+	 			__self.animateCounter(__self.countActivation(e, true));
 				
 			}
 
@@ -116,9 +115,8 @@ $(document).ready(function() {
 	 		}
 			
 	 		function mooveHandler(e) {
-	 			var someEvent = e,
-						byClick = false;
-	 			__self.countActivation(someEvent, byClick);
+	 			
+	 			__self.countActivation(e, false);
 
 	 		}
 		}
