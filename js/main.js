@@ -96,7 +96,7 @@ $(document).ready(function() {
 				var someEvent = e,
 						byClick = true;
 
-				pointer.classList.remove('pointer-animated');
+				
 				scale.removeEventListener('mousemove', mooveHandler);
 	 			
 	 			__self.animateCounter(__self.countActivation(someEvent, byClick));
