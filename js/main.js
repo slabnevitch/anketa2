@@ -42,7 +42,7 @@ $(document).ready(function() {
 	 				counter.innerText = counterValue.toFixed();
 
 				if(byClick == true){
-					this.rotateByClick(currentDegCorrecton, counterValue);
+					this.rotateByClick(currentDegCorrecton, +counter.innerText);
 				}else{
 	 				this.rotatePointer(currentDegCorrecton);
 				}
