@@ -70,7 +70,7 @@ $(document).ready(function() {
 			this.rotateByClick = function(currentDegCorrecton, pointerDifference) {
 	 			var pointerDifferenceModule = Math.abs(pointerDifference);
 	 			console.log('модуль ' + pointerDifferenceModule);
-	 			$('.pointer').stop().animate({rotate: currentDegCorrecton}, pointerDifferenceModule *4);
+	 			$('.pointer').stop(true, true).animate({rotate: currentDegCorrecton}, pointerDifferenceModule *4);
 			}
 			
 			this.resetCounter = function() {
