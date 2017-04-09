@@ -58,7 +58,6 @@ $(document).ready(function() {
 			}
 
 			this.rotateByClick = function(currentDegCorrecton, counterValue) {
-	 			alert(counterValue);
 	 			$('.pointer').animate({rotate: currentDegCorrecton}, counterValue *4);
 			}
 			
