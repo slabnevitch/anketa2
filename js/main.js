@@ -94,7 +94,7 @@ $(document).ready(function() {
 			function clickHandler(e){
 				
 				pointer.classList.remove('pointer-animated');
-				pointer.style.transform = 'rotate(-90deg)';
+				//pointer.style.transform = 'rotate(-90deg)';
 				scale.removeEventListener('mousemove', mooveHandler);
 	 			
 	 			__self.animateCounter(__self.countActivation(e, true));
