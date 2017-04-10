@@ -17,8 +17,7 @@ $(document).ready(function() {
 	 		var body = document.body;
 		 	var	prevX = 0;
 		 	var clickCount = 0;
-		 	var num = 0;
-
+		 
 	 		
 	 		this.init = function() {
 	 			this.regListeners();
@@ -43,13 +42,12 @@ $(document).ready(function() {
 		 			counterValue = cursorX/countItem,
 		 			pointerDifference = counterValue.toFixed() - prevX;
 
-
-	 				console.log('текущее '+ counterValue.toFixed());
-	 				console.log('старое '+ prevX);
-	 				console.log('разница '+ pointerDifference);
+		 			// console.log('текущее '+ counterValue.toFixed());
+	 				// console.log('старое '+ prevX);
+	 				// console.log('разница '+ pointerDifference);
 
 				if(byClick == true){
-					this.rotateByClick(currentDegCorrecton, pointerDifference);
+					this.rotateByClick(currentDegCorrecton, counterValue.toFixed());
 					this.animateCounter(prevX, counterValue.toFixed());
 				}else{
 	 				this.rotatePointer(currentDegCorrecton);
@@ -64,12 +62,11 @@ $(document).ready(function() {
 			this.rotatePointer = function(currentDegCorrecton) {
 	 			pointer.style.transform = 'rotate('+ currentDegCorrecton + 'deg)';
 
-	 			//$('.pointer').animate({rotate: currentDegCorrecton}, 1);
 			}
 
 			this.rotateByClick = function(currentDegCorrecton, pointerDifference) {
 	 			var pointerDifferenceModule = Math.abs(pointerDifference);
-	 			console.log('модуль ' + pointerDifferenceModule);
+	 			
 	 			$('.pointer').stop(true, true).animate({rotate: currentDegCorrecton}, pointerDifferenceModule *4);
 			}
 			
@@ -79,33 +76,33 @@ $(document).ready(function() {
 			}
 
 			this.animateCounter = function(prevNum, nextNum) {
-				
-								//counter.innerText = prevNum;
-
-				console.log('prevNum ' + prevNum);
-				console.log('nextNum ' + nextNum);
-				if(nextNum > prevNum){
-					console.log('сработал ИФ');
+				console.log("prev " + prevNum);
+				console.log("next " + nextNum);
+				var num = 0;
+				counter.innerText = '000';
+				scale.removeEventListener('click', clickHandler);
+				console.log("разница " + (nextNum - prevNum));
+					if(nextNum === prevNum){
+						scale.addEventListener('click', clickHandler);	
+						return false;
+					}
+					
 					var plusTimer = setInterval(function() {
-						num++;
-						if(num == nextNum){
-							 clearInterval(plusTimer);
-						}
-						counter.innerText = num;
-					}, 1);
-						
-				}else{
-					var minusTimer = setInterval(function() {
-						num--;
-						if(num == nextNum){
-							 clearInterval(minusTimer);
-						}
-						counter.innerText = num;
-					}, 1);
-				}
+							num++;
+							if(num == nextNum){
+								 clearInterval(plusTimer);
+								 scale.addEventListener('click', clickHandler);					
+							}
+							counter.innerText = num;
+							
+							
+						}, 1);
+							
+					
+							
+					
 				
-						console.log('num in timer ' + num);
-				return nextNum;
+				
 			}
 
 			function bodyClickHandler(e) {
@@ -116,12 +113,9 @@ $(document).ready(function() {
 			}
 
 			function clickHandler(e){
-				console.log('коунт ' + clickCount);
+				
 				pointer.classList.remove('pointer-animated');
-				if(clickCount == 0){
-					pointer.style.transform = 'rotate(-90deg)';
-				}
-				clickCount++;
+				pointer.style.transform = 'rotate(-90deg)';
 				scale.removeEventListener('mousemove', mooveHandler);
 	 			
 	 			__self.countActivation(e, true);				
@@ -130,19 +124,29 @@ $(document).ready(function() {
 			function enterHandler(e) {
 				pointer.classList.remove('pointer-animated');
 	  			scale.addEventListener('mousemove', mooveHandler);
+	  			scale.removeEventListener('click', clickHandler);
+	  			scale.addEventListener('click', onHoverclickHandler);
 				
 	 		}
 
+	 		function onHoverclickHandler() {
+	 			scale.removeEventListener('mousemove', mooveHandler);
+	 			counter.classList.add('animated');
+	 			counter.classList.add('bounceIn');
+	 		}
+
 	 		function leaveHandler(e) {
-	 				
+	 				counter.classList.remove('animated');
+	 				counter.classList.remove('bounceIn');
 	    		scale.removeEventListener('mousemove', mooveHandler);
+	    		scale.removeEventListener('click', onHoverclickHandler);
 	    		__self.resetCounter();
 	 		}
 			
 	 		function mooveHandler(e) {
 	 			
 	 			__self.countActivation(e, false);
-
+	 			//console.log('moove');
 	 		}
 		}
 
